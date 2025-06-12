@@ -44,6 +44,10 @@ const InitValidation = function () {
       case "fname":
       case "lname":
         valid = fieldEl.value.trim() !== "";
+        const regex=/^[A-Za-z]+$/;
+        if (valid) {
+          valid = regex.test(fieldEl.value);
+        }
         validateField(fieldEl, valid);
         break;
 
