@@ -1,4 +1,4 @@
-const InitValidation= function () {
+const InitValidation = function () {
   const form = document.getElementById("userForm");
   const submitBtn = document.getElementById("submitBtn");
 
@@ -22,7 +22,7 @@ const InitValidation= function () {
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     return regex.test(pwd);
   }
-
+// Validate field
   function validateField(field, isValid, message = "") {
     if (isValid) {
       field.classList.remove("is-invalid");
@@ -35,71 +35,72 @@ const InitValidation= function () {
       }
     }
   }
+// Validating single field
+  function validateSingleField(fieldEl) {
+    const id = fieldEl.id;
+    let valid = true;
 
-  function validateForm() {
-    let isValid = true;
+    switch (id) {
+      case "fname":
+      case "lname":
+        valid = fieldEl.value.trim() !== "";
+        validateField(fieldEl, valid);
+        break;
 
-    // First Name
-    const fnameValid = fields.fname.value.trim() !== "";
-    validateField(fields.fname, fnameValid);
-    isValid &= fnameValid;
+      case "age":
+        const age = parseInt(fieldEl.value, 10);
+        valid = age >= 18 && age <= 151;
+        validateField(fieldEl, valid);
+        break;
 
-    // Last Name
-    const lnameValid = fields.lname.value.trim() !== "";
-    validateField(fields.lname, lnameValid);
-    isValid &= lnameValid;
+      case "emails":
+        valid = fieldEl.value.trim() !== "" && validateEmailList(fieldEl.value);
+        validateField(fieldEl, valid);
+        break;
 
-    // Age
-    const ageValue = parseInt(fields.age.value, 10);
-    const ageValid = ageValue >= 18 && ageValue <= 151;
-    validateField(fields.age, ageValid);
-    isValid &= ageValid;
+      case "pwd":
+        valid = validatePassword(fieldEl.value);
+        validateField(fieldEl, valid, "Password must be at least 8 characters, contain an uppercase, lowercase, and a number.");
+        validateSingleField(fields.cpwd);
+        break;
 
-    // Emails
-    const emailValid = fields.emails.value.trim() !== "" && validateEmailList(fields.emails.value);
-    validateField(fields.emails, emailValid);
-    isValid &= emailValid;
+      case "cpwd":
+        valid = fieldEl.value === fields.pwd.value && fieldEl.value !== "";
+        validateField(fieldEl, valid, "Passwords do not match.");
+        break;
 
-    // Password
-    const pwdValid = validatePassword(fields.pwd.value);
-    validateField(
-      fields.pwd,
-      pwdValid,
-      "Password must be at least 8 characters, contain an uppercase, lowercase, and a number."
-    );
-    isValid &= pwdValid;
+      case "contact":
+        valid = /^[0-9]{11}$/.test(fieldEl.value.trim());
+        validateField(fieldEl, valid, "Contact number must be exactly 11 digits.");
+        break;
+    }
 
-    // Confirm Password
-    const cpwdValid = fields.cpwd.value === fields.pwd.value && fields.cpwd.value !== "";
-    validateField(fields.cpwd, cpwdValid, "Passwords do not match.");
-    isValid &= cpwdValid;
-
-    // Contact Number
-    const contactValue = fields.contact.value.trim();
-    const contactValid =  /^[0-9]{11}$/.test(contactValue);
-    validateField(fields.contact, contactValid, "Contact number must be exactly 11 digits.");
-    isValid &= contactValid;
-
-    submitBtn.disabled = !Boolean(isValid);
+    validateSubmitButton(); 
+  }
+// Submit Button Validation
+  function validateSubmitButton() {
+    const allValid = Object.values(fields).every(field => field.classList.contains("is-valid"));
+    submitBtn.disabled = !allValid;
   }
 
-//   Adding Event Listners for validation
-
+  // Validate Whole Form
+  function validateForm() {
+    Object.values(fields).forEach(field => validateSingleField(field));
+  }
+// Adding EventListener to all fields
   Object.values(fields).forEach(field => {
-    field.addEventListener("input", validateForm);
-    field.addEventListener("blur", validateForm);
+    field.addEventListener("input", () => validateSingleField(field));
+    field.addEventListener("blur", () => validateSingleField(field));
   });
 
-//   Form Submission Checking
-
+  // Form submission
   form.addEventListener("submit", function (e) {
-    e.preventDefault(); 
+    e.preventDefault();
     validateForm();
     if (!submitBtn.disabled) {
       alert("Form submitted successfully!");
     }
   });
 };
-
 
 InitValidation();
