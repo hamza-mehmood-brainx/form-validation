@@ -78,6 +78,11 @@ const InitValidation = function () {
         break;
 
       case "contact":
+        valid = fieldEl.value.trim() >= 0;
+        if (!valid) {
+          validateField(fieldEl, valid, "Contact number cannot be negative.");
+          break;
+        }
         valid = /^[0-9]{11}$/.test(fieldEl.value.trim());
         validateField(fieldEl, valid, "Contact number must be exactly 11 digits.");
         break;
