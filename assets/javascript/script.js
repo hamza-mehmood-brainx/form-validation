@@ -14,7 +14,7 @@ const InitValidation = function () {
 
   function validateEmailList(emailStr) {
     const emails = emailStr.split(",").map(e => e.trim());
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emails.every(email => emailRegex.test(email));
   }
 
@@ -44,11 +44,15 @@ const InitValidation = function () {
       case "fname":
       case "lname":
         valid = fieldEl.value.trim() !== "";
+        if (!valid){
+          validateField(fieldEl, valid);
+          break;
+        }
         const regex=/^[A-Za-z]+$/;
         if (valid) {
           valid = regex.test(fieldEl.value);
         }
-        validateField(fieldEl, valid);
+        validateField(fieldEl, valid, "Name must contain only letters.");
         break;
 
       case "age":
