@@ -1,4 +1,4 @@
-const InitValidation = function () {
+(function () {
   const form = document.getElementById("userForm");
   const submitBtn = document.getElementById("submitBtn");
 
@@ -19,7 +19,7 @@ const InitValidation = function () {
   }
 
   function validatePassword(pwd) {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(pwd);
   }
 // Validate field
@@ -58,17 +58,17 @@ const InitValidation = function () {
       case "age":
         const age = parseInt(fieldEl.value, 10);
         valid = age >= 18 && age <= 151;
-        validateField(fieldEl, valid);
+        validateField(fieldEl, valid, "Age must be between 18 and 151.");
         break;
 
       case "emails":
         valid = fieldEl.value.trim() !== "" && validateEmailList(fieldEl.value);
-        validateField(fieldEl, valid);
+        validateField(fieldEl, valid, "Please enter valid comma-separated email addresses.");
         break;
 
       case "pwd":
         valid = validatePassword(fieldEl.value);
-        validateField(fieldEl, valid, "Password must be at least 8 characters, contain an uppercase, lowercase, and a number.");
+        validateField(fieldEl, valid, "Password must be at least 8 characters, contain an uppercase, lowercase, a number and a special character.");
         validateSingleField(fields.cpwd);
         break;
 
@@ -114,6 +114,4 @@ const InitValidation = function () {
       alert("Form submitted successfully!");
     }
   });
-};
-
-InitValidation();
+})();

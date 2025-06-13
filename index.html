@@ -16,7 +16,7 @@
   <body>
     <div class="container p-2 p-md-5 col-md-6 mx-md-auto">
       <form id="userForm" action="/" method="POST" novalidate>
-        <!-- Firs Name  -->
+        <!-- First Name  -->
         <div class="mb-3">
           <label for="fname" class="form-label">First Name:</label>
           <input
@@ -106,13 +106,7 @@
         <!-- Contact Number -->
         <div class="mb-3">
           <label for="contact" class="form-label">Contact Number:</label>
-          <input
-            type="tel"
-            class="form-control"
-            id="contact"
-            name="contact"
-            pattern="[0-9]{11}"
-          />
+          <input type="tel" class="form-control" id="contact" name="contact" />
           <div class="invalid-feedback">
             Contact number must be exactly 11 digits.
           </div>
